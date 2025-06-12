@@ -77,7 +77,7 @@ export default function QRGeneratorPage() {
           <div className="bg-white p-4 rounded shadow flex flex-col items-center">
             <QRCodeSVG
               value={url}
-              size={256}
+              size={1024}
               level="H"
               includeMargin
               ref={svgRef}
@@ -85,7 +85,7 @@ export default function QRGeneratorPage() {
             />
             <QRCodeCanvas
               value={url}
-              size={256}
+              size={1024}
               level="H"
               includeMargin
               style={{ display: "none" }}
