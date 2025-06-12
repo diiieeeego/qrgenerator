@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { QRCodeSVG, QRCodeCanvas } from "qrcode.react";
+import {Card} from "@/components/ui/card"
 
 export default function QRGeneratorPage() {
   const [url, setUrl] = useState("");
@@ -53,66 +54,78 @@ export default function QRGeneratorPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100 text-neutral-800">
-      <h1 className="text-3xl font-bold mb-6">QR Code Generator</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center checkerboard text-neutral-800">
+      <Card className="p-10 px-5 sm:px-10 bg-neutral-100/95">
+        <h1 className="text-3xl font-bold mb-6 text-center">QR Code Generator</h1>
 
-      <input
-        type="url"
-        value={url}
-        onChange={handleInputChange}
-        placeholder="Enter a valid URL (https://...)"
-        className={`w-full max-w-md px-4 py-2 border rounded-md mb-4 ${
-          isValid ? "border-gray-300" : "border-red-500"
-        }`}
-      />
+        <input
+          type="url"
+          value={url}
+          onChange={handleInputChange}
+          placeholder="Enter a valid URL (https://...)"
+          className={`w-full max-w-md px-4 py-2 border rounded-md mb-4 ${isValid ? "border-gray-300" : "border-red-500"
+            }`}
+        />
 
-      {!isValid && (
-        <p className="text-red-500 text-sm mb-4">
-          Please enter a valid URL starting with http:// or https://
-        </p>
-      )}
+        {!isValid && (
+          <p className="text-red-500 text-sm mb-4">
+            Please enter a valid URL starting with http:// or https://
+          </p>
+        )}
 
-      {isValid && url && (
-        <>
-          <div className="bg-white p-4 rounded shadow flex flex-col items-center">
-            <QRCodeSVG
-              value={url}
-              size={1024}
-              level="H"
-              includeMargin
-              ref={svgRef}
-              className="mb-4"
-            />
-            <QRCodeCanvas
-              value={url}
-              size={1024}
-              level="H"
-              includeMargin
-              style={{ display: "none" }}
-              ref={canvasRef}
-            />
+        {isValid && url && (
+          <>
+            {/* Visible small QR code */}
+            <div className="bg-white p-4 rounded shadow flex flex-col items-center">
+              <QRCodeSVG
+                value={url}
+                size={256} // small visual
+                level="H"
+                includeMargin
+                className="mb-4"
+              />
 
-            <div className="flex gap-4">
-              <button
-                onClick={downloadSVG}
-                className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-              >
-                Download SVG
-              </button>
-              <button
-                onClick={downloadPNG}
-                className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-              >
-                Download PNG
-              </button>
+              {/* Hidden high-res QR codes for download */}
+              <div className="hidden">
+                <QRCodeSVG
+                  value={url}
+                  size={1024}
+                  level="H"
+                  includeMargin
+                  ref={svgRef}
+                />
+                <QRCodeCanvas
+                  value={url}
+                  size={1024}
+                  level="H"
+                  includeMargin
+                  ref={canvasRef}
+                />
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  onClick={downloadSVG}
+                  className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                >
+                  Download SVG
+                </button>
+                <button
+                  onClick={downloadPNG}
+                  className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                >
+                  Download PNG
+                </button>
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
 
-      <p className="mt-6 text-sm text-gray-500">
-        QR code updates in real time. You can download it as SVG or PNG.
-      </p>
-    </div>
+        <p className="mt-6 text-sm text-gray-500">
+          QR code updates in real time. You can download it as SVG or PNG.
+        </p>
+        </Card>
+      </div>
+    
   );
 }
